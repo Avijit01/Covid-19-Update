@@ -10,11 +10,12 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardMainCountryId"
         android:layout_width="match_parent"
         android:layout_height="330dp"
         android:layout_margin="20dp"
         app:cardElevation="10dp"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="6dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -38,6 +39,7 @@
                 android:visibility="gone">
 
                 <LinearLayout
+                    android:id="@+id/layoutCountryMainId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -59,7 +61,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="20dp"
-                        android:background="@color/color_two" />
+                        android:background="@color/black" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -97,7 +99,7 @@
                         android:layout_height="1dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:background="@color/color_two" />
+                        android:background="@color/black" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -135,7 +137,7 @@
                         android:layout_height="1dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:background="@color/color_two" />
+                        android:background="@color/black" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -173,7 +175,7 @@
                         android:layout_height="1dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:background="@color/color_two" />
+                        android:background="@color/black" />
 
 
                     <RelativeLayout
@@ -212,7 +214,7 @@
                         android:layout_height="1dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:background="@color/color_two" />
+                        android:background="@color/black" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -250,7 +252,7 @@
                         android:layout_height="1dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:background="@color/color_two" />
+                        android:background="@color/black" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -288,7 +290,7 @@
                         android:layout_height="1dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:background="@color/color_two" />
+                        android:background="@color/black" />
 
 
                 </LinearLayout>
@@ -317,7 +319,7 @@
             android:layout_weight="1"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
-            app:cardCornerRadius="10dp">
+            app:cardCornerRadius="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -353,7 +355,7 @@
             android:layout_marginLeft="10dp"
             android:layout_weight="1"
             app:cardElevation="10dp"
-            app:cardCornerRadius="10dp">
+            app:cardCornerRadius="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"

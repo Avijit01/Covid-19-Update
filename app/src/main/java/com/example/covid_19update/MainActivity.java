@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView txtCountryName,txtCasesMain,txtDeathsMain,txtRecoveredMain,txtTodayCasesMain,txtTodayDeathsMain,txtTodayRecoveredMain;
     SimpleArcLoader simpleArcLoaderMain;
     ScrollView scrollViewMain;
+    LinearLayout mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +40,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         cardGlobal = findViewById(R.id.cardGlobalStatsId);
         cardCountry = findViewById(R.id.cardCountryStatsId);
+        mainLayout = findViewById(R.id.layoutCountryMainId);
 
         cardCountry.setOnClickListener(this);
         cardGlobal.setOnClickListener(this);
+        mainLayout.setOnClickListener(this);
 
         txtCountryName = findViewById(R.id.countryNameId);
         txtCasesMain = findViewById(R.id.casesMainId);
@@ -110,6 +115,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+
+        if(view.getId() == R.id.layoutCountryMainId)
+        {
+            String countryName = txtCountryName.getText().toString().toLowerCase();
+
+            Intent intent = new Intent(this,CountryDetails.class);
+            intent.putExtra("myCountryName",countryName);
+
+            startActivity(intent);
+
+        }
+
         if(view.getId() == R.id.cardGlobalStatsId)
         {
             Intent intent = new Intent(this,GlobalStats.class);
@@ -120,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             Toast.makeText(this, "Work In Progress", Toast.LENGTH_SHORT).show();
         }
+
 
     }
 }
