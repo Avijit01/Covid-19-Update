@@ -53,7 +53,7 @@
                     android:id="@+id/scrollViewCountryDetailsId"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
 
 
@@ -304,6 +304,8 @@
             </RelativeLayout>
 
         </androidx.cardview.widget.CardView>
+
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="234dp"
@@ -324,7 +326,7 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     app:arc_style="simple_arc"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     >
                 </com.leo.simplearcloader.SimpleArcLoader>
 
@@ -539,7 +541,79 @@
                     </LinearLayout>
 
 
+
                 </ScrollView>
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            app:cardElevation="10dp"
+            app:cardCornerRadius="6dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <com.leo.simplearcloader.SimpleArcLoader
+                    android:id="@+id/simpleArcloaderDeathChartCountryDetailsId"
+                    android:layout_centerInParent="true"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    app:arc_style="simple_arc"
+                    android:visibility="gone"
+                    >
+                </com.leo.simplearcloader.SimpleArcLoader>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="vertical">
+
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:fontFamily="sans-serif-light"
+                                android:text="Case Chart For Last 10 Days"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+
+                        <com.github.mikephil.charting.charts.BarChart
+                            android:id="@+id/barChartCaseRecentId"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            />
+
+
+
+
+                    </LinearLayout>
 
 
             </RelativeLayout>

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,13 +15,23 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.leo.simplearcloader.SimpleArcLoader;
 
-import org.eazegraph.lib.models.PieModel;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class CountryDetails extends AppCompatActivity {
@@ -33,6 +42,12 @@ public class CountryDetails extends AppCompatActivity {
     int caseByDatesInc = 0;
     int februaryFlag = 0;
 
+    int startCase;
+    int startToEnd;
+    int[] caseDayByDay;
+    int[] caseDayByDaySeparated;
+    String[] dateDayByDayStr;
+
     TextView txtCountryNameCountryDetails,txtCasesCountryDetails,txtDeathsCountryDetails,txtRecoveredCountryDetails,txtTodayCasesCountryDetails,txtTodayDeathsCountryDetails,txtTodayRecoveredCountryDetails;
     SimpleArcLoader simpleArcLoaderCountryDetails;
     ScrollView scrollViewCountryDetails;
@@ -42,10 +57,17 @@ public class CountryDetails extends AppCompatActivity {
     ScrollView scrollViewCountryDetails2;
 
 
+    BarChart barChartCaseRecent;
+
+    TextView fetchDeaths;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country_details);
+
+       // fetchDeaths = findViewById(R.id.fetchDeathsId);
 
 
         countryNameForJson = getIntent().getStringExtra("myCountryName");
@@ -71,11 +93,44 @@ public class CountryDetails extends AppCompatActivity {
         simpleArcLoaderCountryDetails2 = findViewById(R.id.simpleArcloaderCountryDetailsId2);
         scrollViewCountryDetails2 = findViewById(R.id.scrollViewCountryDetailsId2);
 
+        barChartCaseRecent = (BarChart) findViewById(R.id.barChartCaseRecentId);
+
 
         fetchCountryDataOverAll();
-        //fetchCountryDataHistory();
+        fetchCountryDataHistory();
+        fetchBarChartCaseRecent();
 
     }
+
+    private void fetchBarChartCaseRecent() {
+        barChartCaseRecent.setDrawBarShadow(false);
+        barChartCaseRecent.setDrawValueAboveBar(true);
+        //barChartCaseRecent.setMaxVisibleValueCount(50);
+        barChartCaseRecent.setPinchZoom(true);
+        barChartCaseRecent.setDrawGridBackground(true);
+
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+
+        barEntries.add(new BarEntry(1,20));
+        barEntries.add(new BarEntry(2,40));
+        barEntries.add(new BarEntry(3,30));
+        barEntries.add(new BarEntry(4,10));
+
+        BarDataSet barDataSet = new BarDataSet(barEntries,"Data Set");
+        barDataSet.setColor(Color.GREEN);
+
+        BarData data = new BarData((barDataSet));
+        barChartCaseRecent.setData(data);
+    }
+
+    public class MyXAxisValueFormatter implements IAxisValueFormatter{
+
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            return null;
+        }
+    }
+
 
     private void fetchCountryDataOverAll() {
         String url = "https://corona.lmao.ninja/v2/countries/"+countryNameForJson;
@@ -115,12 +170,21 @@ public class CountryDetails extends AppCompatActivity {
                             simpleArcLoaderCountryDetails.setVisibility(View.GONE);
                             scrollViewCountryDetails.setVisibility(View.VISIBLE);
 
+                            simpleArcLoaderCountryDetails2.stop();
+                            simpleArcLoaderCountryDetails2.setVisibility(View.GONE);
+                            scrollViewCountryDetails2.setVisibility(View.VISIBLE);
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
 
                             simpleArcLoaderCountryDetails.stop();
                             simpleArcLoaderCountryDetails.setVisibility(View.GONE);
                             scrollViewCountryDetails.setVisibility(View.VISIBLE);
+
+                            simpleArcLoaderCountryDetails2.stop();
+                            simpleArcLoaderCountryDetails2.setVisibility(View.GONE);
+                            scrollViewCountryDetails2.setVisibility(View.VISIBLE);
                         }
 
 
@@ -133,6 +197,10 @@ public class CountryDetails extends AppCompatActivity {
                 simpleArcLoaderCountryDetails.setVisibility(View.GONE);
                 scrollViewCountryDetails.setVisibility(View.VISIBLE);
 
+                simpleArcLoaderCountryDetails2.stop();
+                simpleArcLoaderCountryDetails2.setVisibility(View.GONE);
+                scrollViewCountryDetails2.setVisibility(View.VISIBLE);
+
                 Toast.makeText(CountryDetails.this,error.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
@@ -144,12 +212,10 @@ public class CountryDetails extends AppCompatActivity {
     }
 
 
-
-    /*
     private void fetchCountryDataHistory() {
 
 
-        String url = "https://corona.lmao.ninja/v2/historical/"+countryNameForJson;
+        String url = "https://corona.lmao.ninja/v2/historical/"+countryNameForJson+"/?lastdays=all";
 
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -158,7 +224,8 @@ public class CountryDetails extends AppCompatActivity {
 
                         try {
 
-
+/*
+{
                             String[] caseByDates = new String[800];
 
                             for(yearLoop = 2020; yearLoop<=2021; yearLoop++)
@@ -195,38 +262,88 @@ public class CountryDetails extends AppCompatActivity {
 
                                     }
                                 }
+}
 
+ */
 
 
                             JSONObject jsonObject = new JSONObject(response.toString());
                             String jsontimeline = jsonObject.getString("timeline");
                             JSONObject jsonObjectTimeline = new JSONObject(jsontimeline);
+
                             String jsonCases = jsonObjectTimeline.getString("cases");
                             JSONObject jsonObjectCases = new JSONObject(jsonCases);
 
-
-
-                            //txtdate2.setText(jsonObject.getString("deaths"));
-                            //caseByDates[0] = jsonObjectCases.getString("3/9/21");
+                            String jsonDeaths = jsonObjectTimeline.getString("deaths");
+                            JSONObject jsonObjectDeaths = new JSONObject(jsonDeaths);
 
 
 
                             //Date Key Fetch:
 
-                            int length = jsonObjectCases.length();
+                            int length = jsonObjectDeaths.length();
 
-                            Iterator<String> iterator = jsonObjectCases.keys();
+                            Iterator<String> iteratorDate = jsonObjectCases.keys();
                             String[] dateKey = new String[length];
-                            int caseNo = 0;
-                            while (iterator.hasNext()) {
-                                dateKey[caseNo] = iterator.next();
-                                caseNo += 1;
+                            int keyNo = 0;
+                            while (iteratorDate.hasNext()) {
+                                dateKey[keyNo] = iteratorDate.next();
+                                keyNo += 1;
                             }
 
-                            //Date Key Fetch/
 
-                            //   String test = dateKey[0] +" "+dateKey[1]+" "+dateKey[2];
-                          //  txtDate1.setText(test);
+                            //Case DayByDay & Date DayByDay
+
+                            String[] caseDayByDayStrRaw = new String[length];
+                            int[] caseDayByDayRaw = new int[length];
+
+                            for (int caseKeyNo = 0; caseKeyNo < length; caseKeyNo++)
+                            {
+                                caseDayByDayStrRaw[caseKeyNo] = jsonObjectCases.getString("" + dateKey[caseKeyNo]);
+                                caseDayByDayRaw[caseKeyNo] = Integer.parseInt(caseDayByDayStrRaw[caseKeyNo]);
+                                if(caseDayByDayRaw[caseKeyNo] > 0)
+                                {
+                                    startCase = caseKeyNo;
+                                    break;
+                                }
+                            }
+
+
+
+                            startToEnd = length - startCase;
+
+                            String[] caseDayByDayStr = new String[startToEnd];
+                            dateDayByDayStr = new String[startToEnd];
+                            caseDayByDay = new int[startToEnd];
+                            caseDayByDaySeparated = new int[startToEnd];
+                            int caseDayByDayNo = 0;
+                            int flag = 0;
+
+                            for (int caseKeyNo = startCase; caseKeyNo < length; caseKeyNo++)
+                            {
+                                caseDayByDayStr[caseDayByDayNo] = jsonObjectCases.getString("" + dateKey[caseKeyNo]);
+                                caseDayByDay[caseDayByDayNo] = Integer.parseInt(caseDayByDayStr[caseDayByDayNo]);
+
+                                if(flag == 0)
+                                {
+                                    caseDayByDaySeparated[caseDayByDayNo] = caseDayByDay[caseDayByDayNo];
+                                    flag = 1;
+                                }
+                                else caseDayByDaySeparated[caseDayByDayNo] = caseDayByDay[caseDayByDayNo] - caseDayByDay[caseDayByDayNo - 1];
+
+                                dateDayByDayStr[caseDayByDayNo] = dateKey[caseKeyNo];
+
+                                caseDayByDayNo++;
+                            }
+
+/*
+                            String dateWithCaseList = "";
+                            dateWithCaseList = dateWithCaseList + dateDayByDayStr[startToEnd - 1] + "     :   " + caseDayByDaySeparated[startToEnd - 1];
+                            fetchDeaths.setText(dateWithCaseList);
+
+*/
+
+
 
 
 
@@ -250,8 +367,6 @@ public class CountryDetails extends AppCompatActivity {
         requestQueue.add(request);
 
     }
-
-     */
 
 
 }
